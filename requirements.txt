@@ -1,11 +1,7 @@
-Automat==20.2.0
 Django==4.0.6
-Pillow==9.2.0
 PyHamcrest==2.0.3
 Twisted==22.4.0
 asgiref==3.5.2
-attrs==21.4.0
-beautifulsoup4==4.11.1
 certifi==2022.6.15
 cffi==1.15.1
 chardet==5.0.0
