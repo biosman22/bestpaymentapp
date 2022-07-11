@@ -1,1 +1,1 @@
-web: gunicorn partner.wsgi
+web: gunicorn bestpaymentapp.wsgi
