@@ -25,7 +25,13 @@ SECRET_KEY = 'django-insecure-labir4#a4me5@bpg3%y*)yz-d2-(5(4-@qwbe02n$cmh)otgds
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+
+if DEBUG:
+
+    ALLOWED_HOSTS = [u'localhost', u'127.0.0.1', u"https://bestpaymentapp-staging.herokuapp.com",u"https://www.bestpaymentapp-staging.herokuapp.com",u"https://bestpaymentapp.herokuapp.com",u"https://bestpaymentapp.herokuapp.com",]
+else:
+    ALLOWED_HOSTS = [u"https://bestpaymentapp-staging.herokuapp.com",u"https://www.bestpaymentapp-staging.herokuapp.com",u"https://bestpaymentapp.herokuapp.com",u"https://bestpaymentapp.herokuapp.com", ]
+
 
 
 # Application definition
