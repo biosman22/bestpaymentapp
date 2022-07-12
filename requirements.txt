@@ -1,4 +1,5 @@
 Django==4.0.6
+django-crispy-forms==1.14.0
 PyHamcrest==2.0.3
 Twisted==22.4.0
 asgiref==3.5.2
