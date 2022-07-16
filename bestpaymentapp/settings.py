@@ -29,7 +29,7 @@ DEBUG = True
 
 
 if DEBUG:
-    ALLOWED_HOSTS = [u'localhost', u'127.0.0.1', u"bestpaymentapp-staging.herokuapp.com",u"bestpaymentapp.herokuapp.com",]
+    ALLOWED_HOSTS = [u'localhost', u'127.0.0.1', u"bestpaymentapp-staging.herokuapp.com",u"bestpaymentapp.herokuapp.com","192.168.0.102"]
 else:
     ALLOWED_HOSTS = [u"bestpaymentapp-staging.herokuapp.com",u"bestpaymentapp.herokuapp.com", ]
 

@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.contrib.auth import login, authenticate ,logout #add this
 from django.contrib.auth.forms import AuthenticationForm #add this
 
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect, FileResponse
 
 from .payments.rapyd import *
 
@@ -13,7 +14,7 @@ from .payments.rapyd import *
 
 
 def homepage(request):
-	#get_countries()
+	get_countries()
 	#create_wallet()
 	#country_required_documents()
 	#verify_identity()
@@ -22,6 +23,10 @@ def homepage(request):
 	#bank_deposit()
 	return render(request,'home.html')
 
+
+def country_documents(request):
+	country_required_documents()
+	return 
 
 
 def register_request(request):

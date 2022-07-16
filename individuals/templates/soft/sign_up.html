@@ -16,9 +16,9 @@
                 <p class="mb-0">Enter your info to sign up</p>
               </div>
               <div class="card-body">
-                <form role="form">
+                <form role="form" id="my_app1">
+                  
                   <div class="row">
-                    
                       <div class="mb-3 col-md-6">
                         <div class="form-group">
                         <input type="text" class="form-control form-control-lg" placeholder="First Name" aria-label="First" aria-describedby="first-addon">
@@ -55,7 +55,12 @@
                         <select class="form-control" id="formSelect2">
                           <option value="" selected disabled hidden>Choose here</option>
                           {% for country in countries %}
-                          <option>{{country.name}}</option>
+                          <option value="{{country.name}}"  
+                          phone_code ="{{country.phone_code}}" 
+                          iso_alpha2="{{country.iso_alpha2}}"
+                          currency_code="{{country.currency_code}}"
+                          currency_name ="{{country.currency_name}}"
+                          currency_sign="{{country.currency_sign}}">{{country.name}}</option>
                           
                           {% endfor %}
                         </select>
@@ -63,20 +68,35 @@
                     </div>
                   </div>
 
+                  <div class="row">
+                    <div class="mb-3">
+                      <div class="form-group">
+                        <div class="input-group mb-4">
+                          <span class="input-group-text">+[[phone_code]]</span>
+                          <input class="form-control" placeholder="Mobile number" type="text">
+                        </div>
+                    </div>
+                    </div>
+
+                </div>
+
+
+
+
 
                   <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" id="rememberMe">
                     <label class="form-check-label" for="rememberMe">Remember me</label>
                   </div>
                   <div class="text-center">
-                    <button type="button" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">Sign in</button>
+                    <button type="button" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">Sign Up</button>
                   </div>
                 </form>
               </div>
               <div class="card-footer text-center pt-0 px-lg-2 px-1">
                 <p class="mb-4 text-sm mx-auto">
-                  Don't have an account?
-                  <a href="javascript:;" class="text-primary text-gradient font-weight-bold">Sign up</a>
+                  have an account?
+                  <a href="javascript:;" class="text-primary text-gradient font-weight-bold">Sign in</a>
                 </p>
               </div>
             </div>

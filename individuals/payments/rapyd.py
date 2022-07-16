@@ -12,7 +12,7 @@ def get_countries():
     
     results = call_api(http_method, path=path)
 
-   # print(results.json())
+    print(results.json())
     return results.json()
 
 
