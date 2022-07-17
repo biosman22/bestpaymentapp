@@ -13,6 +13,7 @@ from .payments.rapyd import *
 # Create your views here.
 
 
+
 def homepage(request):
 	get_countries()
 	#create_wallet()
