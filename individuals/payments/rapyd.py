@@ -12,7 +12,7 @@ def get_countries():
     
     results = call_api(http_method, path=path)
 
-    print(results.json())
+    #print(results.json())
     return results.json()
 
 
@@ -69,13 +69,13 @@ def create_wallet():
 
 
 
-def country_required_documents():
-
-    country = 'US'
+def country_required_documents(country):
 
     results = call_api('get', path=f'/v1/identities/types?country={country}')
 
     print(results.json())
+
+    return results.json()
 
 
 def verify_identity():

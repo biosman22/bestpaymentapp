@@ -25,9 +25,6 @@ def homepage(request):
 	return render(request,'home.html')
 
 
-def country_documents(request):
-	country_required_documents()
-	return 
 
 
 def register_request(request):
@@ -80,3 +77,11 @@ def sign_up_req(request):
 	#list_virtual_accounts()
 	#bank_deposit()
 	return render(request,'soft/sign_up.html', {"countries": all_countries['data']})
+
+
+
+
+def country_documents(request):
+	country = request.GET.get('c')
+	response = country_required_documents(country)
+	return JsonResponse(response)

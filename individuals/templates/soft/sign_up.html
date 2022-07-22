@@ -43,16 +43,16 @@
                       <div class="form-group">
                         <label for="exampleFormControlSelect1"> Select Account type</label>
                         <select class="form-control" id="exampleFormControlSelect1">
-                          <option>Business</option>
                           <option>Personal</option>
+                          <option>Business</option>
                         </select>
                       </div>
                     </div>
                     
                     <div class="mb-3 col-md-6">
                       <div class="form-group">
-                        <label for="formSelect2"> Select Country</label>
-                        <select class="form-control" id="formSelect2">
+                        <label for="country_list"> Select Country</label>
+                        <select class="form-control" id="country_list">
                           <option value="" selected disabled hidden>Choose here</option>
                           {% for country in countries %}
                           <option value="{{country.name}}"  
@@ -77,6 +77,31 @@
                         </div>
                     </div>
                     </div>
+
+                </div>
+
+                <div class="row">
+                  <div class="mb-3 col-md-6">
+                    <div class="form-group">
+                      <label for="formSelect3"> Select Identification type</label>
+                      <select class="form-control" id="formSelect3">
+                        <option value="" selected disabled hidden>Choose here</option>
+                        <option v-for="(item, key) in id_types" :value="key">
+                          [[item]]
+                        </option>
+
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="mb-3 col-md-6">
+                    <div class="form-group">
+                      
+                      <label for="formSelect2"> Write Identification Number</label>
+                        <input class="form-control" placeholder="Identification Number" type="text">
+                      
+                  </div>
+                  </div>
 
                 </div>
 
