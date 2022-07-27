@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.forms import ModelForm
 from .models import Account
@@ -26,3 +26,10 @@ class AccountForm(ModelForm):
     class Meta:
         model = Account
         fields = ['first_name', 'last_name', 'phone_number', 'phone_code','email','password', 'country_code', 'country_name', 'contact_type', 'identification_type', 'identification_number']
+
+
+
+
+class Auth_email(AuthenticationForm):
+    email = forms.BooleanField(required=True)
+	

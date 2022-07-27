@@ -5,12 +5,54 @@ from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
 )
 
-
+from .lazy_encoder import LazyEncoder
+from django.core.serializers import serialize
 import datetime
 
 from django.urls import reverse
-
+import json
 # Create your models here.
+
+
+
+class AccountsManager(BaseUserManager):
+    def create_user(self, email=None, password=None):
+        """
+        Creates and saves a User with the given email, date of
+        birth and password.
+        """
+        if not email:
+            raise ValueError('Users must have an email address')
+
+        user = self.model(
+            email=self.normalize_email(email),
+            #date_of_birth=date_of_birth,
+        )
+
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None):
+        """
+        Creates and saves a superuser with the given email, date of
+        birth and password.
+        """
+        user = self.create_user(
+            email,
+            password=password,
+            #date_of_birth=date_of_birth,
+        )
+        user.is_admin = True
+        user.save(using=self._db)
+        return user
+    #def get_by_natural_key(self, email):
+    #     return self.get(email=email)
+
+
+
+
+
 
 
 class Account(AbstractBaseUser):
@@ -62,11 +104,43 @@ class Account(AbstractBaseUser):
     contact_rapyd_id = models.CharField(max_length=50, blank=True)  # returned value
     contact_url = models.CharField(max_length=50, blank=True) # returned value
     verification_status = models.CharField(max_length=50, default='not verified')
+    
+    objects = AccountsManager()
     USERNAME_FIELD = 'email'
 
-    def get_absolute_url(self):
+    REQUIRED_FIELDS =[]  
+    #                    ['first_name', 
+    #                     'last_name',
+    #                     'phone_number',
+    #                     'phone_code', 
+    #                     'country_name'
+                        #'contact_type',
+                        #'marital_status',
+                        #'gender',
+                        #'verification_status']
+    
+    def __str__(self):
+        #ser_obj =  json.loads(serialize('json', [self], cls=LazyEncoder))[0]['fields']
+        #return  json.dumps( ser_obj)
+        return self.email
+    class Meta:
+        pass
+        #ordering = ('-country_code')#, '-updated_at', )
+    def get_full_name(self):
+        if self.first_name:
+            return f'{self.first_name}  {self.last_name}'
+        return self.email.split('@')[0]
+    def has_perm(self, perm, obj=None):
+        return True
+    def has_module_perms(self, app_label):
+        return True
+    
+
+    # def get_absolute_url(self):
         
-        return reverse('contact_detail', kwargs={'pk' : self.pk})
+    #     return reverse('contact_detail', kwargs={'pk' : self.pk})
+
+
 
 
 

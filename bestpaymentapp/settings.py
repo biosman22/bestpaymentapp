@@ -163,3 +163,9 @@ MESSAGE_TAGS = {
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 WHITENOISE_AUTOREFRESH = True
+
+
+
+AUTH_USER_MODEL = 'individuals.Account'
+
+AUTHENTICATION_BACKENDS = ['individuals.my_backend.EmailBackend']
