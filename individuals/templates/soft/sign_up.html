@@ -16,35 +16,36 @@
                 <p class="mb-0">Enter your info to sign up</p>
               </div>
               <div class="card-body">
-                <form role="form" id="my_app1">
+                <form role="form" id="my_app1" method="POST" action="/ind/create_wallet" >
+                  {% csrf_token %}
                   
                   <div class="row">
                       <div class="mb-3 col-md-6">
                         <div class="form-group">
-                        <input type="text" id="first_name" class="form-control form-control-lg only_text" placeholder="First Name" aria-label="First" aria-describedby="first-addon">
+                        <input type="text" required name="first_name" class="form-control form-control-lg only_text" placeholder="First Name" aria-label="First" aria-describedby="first-addon">
                       </div>
                       </div>
                       <div class="mb-3 col-md-6">
                         <div class="form-group">
-                        <input type="text" class="form-control form-control-lg only_text" placeholder="Last Name" aria-label="Last" aria-describedby="last-addon">
+                        <input type="text" required  name="last_name" class="form-control form-control-lg only_text" placeholder="Last Name" aria-label="Last" aria-describedby="last-addon">
                         </div>
                       </div>
                   </div>
 
                   <div class="mb-3">
-                    <input type="email" class="form-control form-control-lg email" placeholder="Email" aria-label="Email" aria-describedby="email-addon">
+                    <input type="email" required name="email" class="form-control form-control-lg email" placeholder="Email" aria-label="Email" aria-describedby="email-addon">
                   </div>
                   <div class="mb-3">
-                    <input type="password" class="form-control form-control-lg" placeholder="Password" aria-label="Password" aria-describedby="password-addon">
+                    <input type="password" required name="password" class="form-control form-control-lg" placeholder="Password" aria-label="Password" aria-describedby="password-addon">
                   </div>
 
                   <div class="row">
                     <div class="mb-3 col-md-6">
                       <div class="form-group">
                         <label for="exampleFormControlSelect1"> Select Account type</label>
-                        <select class="form-control" id="exampleFormControlSelect1">
-                          <option>Personal</option>
-                          <option>Business</option>
+                        <select  required name="contact_type" class="form-control" id="exampleFormControlSelect1">
+                          <option value="personal">Personal</option>
+                          <option value="business" >Business</option>
                         </select>
                       </div>
                     </div>
@@ -52,18 +53,19 @@
                     <div class="mb-3 col-md-6">
                       <div class="form-group">
                         <label for="country_list"> Select Country</label>
-                        <select class="form-control" id="country_list">
+                        <select required name="country_code" class="form-control" id="country_list">
                           <option value="" selected disabled hidden>Choose here</option>
                           {% for country in countries %}
-                          <option value="{{country.name}}"  
+                          <option value="{{country.iso_alpha2}}"  
                           phone_code ="{{country.phone_code}}" 
                           iso_alpha2="{{country.iso_alpha2}}"
                           currency_code="{{country.currency_code}}"
                           currency_name ="{{country.currency_name}}"
-                          currency_sign="{{country.currency_sign}}">{{country.name}}</option>
-                          
+                          currency_sign="{{country.currency_sign}}"
+                          country_name = "{{country.name}}">{{country.name}}</option>
                           {% endfor %}
                         </select>
+                        <input  name="country_name" id="country_name" value="Egypt" type="hidden">
                       </div>
                     </div>
                   </div>
@@ -72,8 +74,9 @@
                     <div class="mb-3">
                       <div class="form-group">
                         <div class="input-group mb-4">
-                          <span class="input-group-text">+[[phone_code]]</span>
-                          <input class="form-control phone_number" placeholder="Mobile number" type="text">
+                          <span class="input-group-text">[[phone_code]]</span>
+                          <input  name="phone_code" :value="[[phone_code]]" type="hidden">
+                          <input  required class="form-control phone_number" name="phone_number" placeholder="Mobile number" type="text">
                         </div>
                     </div>
                     </div>
@@ -84,7 +87,7 @@
                   <div class="mb-3 col-md-6">
                     <div class="form-group">
                       <label for="formSelect3"> Select Identification type</label>
-                      <select class="form-control" id="formSelect3">
+                      <select required class="form-control" name="identification_type" id="formSelect3">
                         <option value="" selected disabled hidden>Choose here</option>
                         <option v-for="(item, key) in id_types" :value="key">
                           [[item]]
@@ -98,7 +101,7 @@
                     <div class="form-group">
                       
                       <label for="formSelect2"> Write Identification Number</label>
-                        <input class="form-control" placeholder="Identification Number" type="text">
+                        <input  required class="form-control" name="identification_number" placeholder="Identification Number" type="text">
                       
                   </div>
                   </div>
@@ -114,7 +117,7 @@
                     <label class="form-check-label" for="rememberMe">Remember me</label>
                   </div>
                   <div class="text-center">
-                    <button type="button" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">Sign Up</button>
+                    <button type="submit" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0" >Sign Up</button>
                   </div>
                 </form>
               </div>
@@ -143,3 +146,6 @@
 
 
 {% endblock %}
+
+
+

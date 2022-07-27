@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-
+from django.forms import ModelForm
+from .models import Account
 
 # Create your forms here.
 
@@ -18,3 +19,10 @@ class NewUserForm(UserCreationForm):
 		if commit:
 			user.save()
 		return user
+
+
+
+class AccountForm(ModelForm):
+    class Meta:
+        model = Account
+        fields = ['first_name', 'last_name', 'phone_number', 'phone_code','email','password', 'country_code', 'country_name', 'contact_type', 'identification_type', 'identification_number']

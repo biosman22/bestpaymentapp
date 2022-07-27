@@ -17,46 +17,49 @@ def get_countries():
 
 
 
-def create_wallet():
+def create_wallet(account, wallet):
     path = "/v1/user"
     http_method = "post"
 
-
+    full_phone_number =account.phone_code + account.phone_number
+    print(full_phone_number)
+    print("address_line")
+    print(account.address_line)
 
     d  = json.dumps( {
-    "first_name":"John",
-    "last_name":"Doe",
-    "email":"",
-    "ewallet_reference_id":"John-Doe-03189020",
+    "first_name":account.first_name,
+    "last_name":account.last_name,
+    "email":account.email,
+    "ewallet_reference_id":wallet.ewallet_reference_id,
     "metadata":{
         "merchant_defined": True
     },
-    "phone_number":"",
-    "type":"person",
+    "phone_number":full_phone_number,
+    "type":wallet.type_of_wallet,
     "contact":{
-        "phone_number":"+14155581234",
-        "email":"johnfdoe1@rapyd.net",
-        "first_name":"John",
-        "last_name":"Doe",
-        "contact_type":"personal",
+        "phone_number":full_phone_number,
+        "email":account.email,
+        "first_name":account.first_name,
+        "last_name":account.last_name,
+        "contact_type":account.contact_type,
         "address":{
-            "name":"John Doe",
-            "line_1":"123 Main Street",
-            "line_2":"",
-            "line_3":"",
-            "city":"Anytown",
-            "state":"NY",
-            "country":"US",
-            "zip":"12345",
-            "phone_number":"+14155581234",
+            "name":account.first_name + " "+ account.last_name,
+            "line_1":account.country_name,
+            #"line_2":"",
+            #"line_3":"",
+            #"city":account.city,
+            #"state":account.state,
+            #"country":account.country,
+            #"zip":account.zip_code,
+            #"phone_number":full_phone_number,
             "metadata":{},
             "canton":"",
-            "district":""
+            "district":"",
         },
-        "identification_type":"PA",
-        "identification_number":"12345458890",
-        "date_of_birth":"11/22/2000",
-        "country":"US",
+        "identification_type":account.identification_type,
+        "identification_number":account.identification_number,
+        "date_of_birth":account.date_of_birth,
+        "country":account.country_code,
         "metadata":{
             "merchant_defined":True
         }
@@ -65,7 +68,9 @@ def create_wallet():
 
     r= call_api(http_method, path, body=d)
 
-    print(r.json())
+    #print(r.json())
+
+    return r.json()
 
 
 
@@ -73,7 +78,7 @@ def country_required_documents(country):
 
     results = call_api('get', path=f'/v1/identities/types?country={country}')
 
-    print(results.json())
+    #print(results.json())
 
     return results.json()
 

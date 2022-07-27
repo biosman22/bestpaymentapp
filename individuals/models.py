@@ -8,62 +8,83 @@ from django.contrib.auth.models import (
 
 import datetime
 
+from django.urls import reverse
+
 # Create your models here.
 
 
 class Account(AbstractBaseUser):
     marital_status_CHOICES = [
-        ('Married', 'Married'),
-        ('Single', 'Single'),
-        ('Divorced', 'Divorced'),
-        ('Widowed', 'Widowed'),
-        ('Cohabiting', 'Cohabiting'),
-        ('Not_applicable', 'Not_applicable'),
+        ('married', 'Married'),
+        ('single', 'Single'),
+        ('divorced', 'Divorced'),
+        ('widowed', 'Widowed'),
+        ('cohabiting', 'Cohabiting'),
+        ('not_applicable', 'Not_applicable'),
     ]
 
 
     contact_type_CHOICES = [
-        ('Personal', 'Personal'),
-        ('Business', 'Business'),
+        ('personal', 'Personal'), # A personal wallet only allows one contact per wallet.
+        ('business', 'Business'), # A business can allow more than one contact linked to a wallet.
     ]
 
     
     gender_CHOICES = [
-        ('Personal', 'Personal'),
-        ('Business', 'Business'),
+        ('male', 'Male'),
+        ('female', 'Female'),
+        ('not_applicable', 'Prefer not to tell')
     ]
     
 
     email = models.CharField(max_length=50, unique=True)
     first_name =  models.CharField(max_length=20)
     last_name =   models.CharField(max_length=20)
-    phone_number =  models.CharField(max_length=15)
+    phone_number =  models.CharField(max_length=12)
+    
+    phone_code =  models.CharField(max_length=7)
 
-    country =  models.CharField(max_length=50)
-    city = models.CharField(max_length=50)
-    address_line = models.CharField(max_length=200)
-    state  = models.CharField(max_length=200)
-    zip_code  = models.CharField(max_length=200)
+    country_code = models.CharField(max_length=2)
+    country_name = models.CharField(max_length=50)
+    city = models.CharField(max_length=50,blank=True)
+    address_line = models.CharField(max_length=200, blank=True)
+    state  = models.CharField(max_length=200, blank=True)
+    zip_code  = models.CharField(max_length=200, blank=True)
+    address_rapyd_id = models.CharField(max_length=80, blank=True)
 
-    contact_type = models.CharField(max_length=10, choices=contact_type_CHOICES, default="personal")
-    date_of_birth = models.DateField()
-    identification_type = models.CharField(max_length=3, default="PA") #PA, DL, ID
-    identification_number = models.CharField(max_length=50)
+    contact_type = models.CharField(max_length=10, choices=contact_type_CHOICES, default="person")
+    date_of_birth = models.DateField(blank=True,null=True)
+    identification_type = models.CharField(max_length=3, default="PA", blank=True) #PA, DL, ID
+    identification_number = models.CharField(max_length=50, blank=True)
 
-    marital_status = models.CharField(max_length=20 , choices=marital_status_CHOICES, default ='Single') # * married, single, divorced, widowed, cohabiting, not_applicable
-    gender = models.CharField(max_length=6, choices=gender_CHOICES, default="male")  #* male, female
-    contact_id = models.CharField(max_length=50)  # returned value
-    contact_url = models.CharField(max_length=50)
-    verification_status = models.CharField(max_length=50,default='not verified')
+    marital_status = models.CharField(max_length=14 , choices=marital_status_CHOICES, default ='not_applicable') # * married, single, divorced, widowed, cohabiting, not_applicable
+    gender = models.CharField(max_length=14, choices=gender_CHOICES, default="not_applicable")  #* male, female
+    contact_rapyd_id = models.CharField(max_length=50, blank=True)  # returned value
+    contact_url = models.CharField(max_length=50, blank=True) # returned value
+    verification_status = models.CharField(max_length=50, default='not verified')
     USERNAME_FIELD = 'email'
+
+    def get_absolute_url(self):
+        
+        return reverse('contact_detail', kwargs={'pk' : self.pk})
 
 
 
 class Wallet(models.Model):
-    type_of_wallet = models.CharField(max_length=50)
-    email = models.CharField(max_length=50)
-    first_name =  models.CharField(max_length=20)
-    last_name =   models.CharField(max_length=20)
-    phone_number =  models.CharField(max_length=15)
-    ewallet_reference_id = first_name+"-"+last_name+"-"+ datatime.date.today()
+
+    wallet_type_CHOICES = [
+        ('person', 'Person'), # One personal contact.
+        ('company', 'Company'), # One business contact and multiple personal contacts.
+        ('client', 'Client'), #  Each client wallet has one business contact and multiple personal contacts.
+    
+    ]
+
+    type_of_wallet = models.CharField(max_length=10, choices=wallet_type_CHOICES, default='person')
+
+    ewallet_reference_id = models.CharField(max_length=100)
+    ewallet_rapyd_id = models.CharField(max_length=80, blank=True) # returned value
+
     contact = models.OneToOneField(Account,on_delete=models.CASCADE)
+    def set_ref_id(self,):
+        ref = self.contact.first_name+"-"+self.contact.last_name+"-"+ str(datetime.datetime.now())
+        self.ewallet_reference_id = ref
