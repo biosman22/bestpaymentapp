@@ -159,12 +159,15 @@ def main_page(request):
 	#print(request_body)
 	#print(request.GET)
 	account_text = request.session.get('account', None)
-	if account != None
+	if account_text != None:
 		print(account_text)
 		account = json.loads(account_text)[0]
 		print(account)
 		#print(request.account)
-	return render(request,'soft/profile.html', account)
+		return render(request,'soft/profile.html', account)
+	
+	return render(request,'soft/main.html')
+		
 
 
 def contact_detail(request, pk):
