@@ -166,7 +166,7 @@ def main_page(request):
 		#print(request.account)
 		return render(request,'soft/profile.html', account)
 	
-	return render(request,'soft/main_V2.html')
+	return render(request,'soft/main_v2.html')
 		
 
 
