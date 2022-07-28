@@ -52,6 +52,8 @@ class AccountsManager(BaseUserManager):
 
 
 
+
+
 class Wallet(models.Model):
 
     wallet_type_CHOICES = [
@@ -65,6 +67,7 @@ class Wallet(models.Model):
 
     ewallet_reference_id = models.CharField(max_length=100)
     ewallet_rapyd_id = models.CharField(max_length=80, blank=True) # returned value
+    
 
     def set_ref_id(self,first_name, last_name):
         #ref = self.contact.first_name+"-"+self.contact.last_name+"-"+ str(datetime.datetime.now())
@@ -123,6 +126,7 @@ class Account(AbstractBaseUser):
     contact_rapyd_id = models.CharField(max_length=50, blank=True)  # returned value
     contact_url = models.CharField(max_length=50, blank=True) # returned value
     verification_status = models.CharField(max_length=50, default='not verified')
+    currency_code =  models.CharField(max_length=5, default='GBP')
     
     objects = AccountsManager()
     USERNAME_FIELD = 'email'
@@ -161,4 +165,24 @@ class Account(AbstractBaseUser):
     #     return reverse('contact_detail', kwargs={'pk' : self.pk})
 
 
+
+
+class Vbank_account(models.Model):
+    rapyd_id =  models.CharField(max_length=100 )
+    merchant_reference_id = models.CharField(max_length=100 )
+    ewallet_rapyd_id = models.CharField(max_length=100)
+    #account in response
+    beneficiary_name = models.CharField(max_length=100 )
+    address = models.CharField(max_length=100)
+    country_iso = models.CharField(max_length=5)
+    iban = models.CharField(max_length=100)
+    sort_code = models.CharField(max_length=20)
+    account_no =  models.CharField(max_length=20)
+    bic = models.CharField(max_length=20)
+    #--- end account
+    status = models.CharField(max_length=5)
+    currency = models.CharField(max_length=5)
+    #transactions still not here
+
+    wallet =  models.ForeignKey(Wallet, on_delete=models.CASCADE)
 

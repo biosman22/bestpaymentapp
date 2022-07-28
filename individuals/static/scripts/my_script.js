@@ -202,7 +202,46 @@ function validate_send() {
 }
 
 
+function retrive_wallet(ewallet_rapyd_id) {
+  //ewallet_rapyd_id =  $(this).attr('ewallet_rapyd_id')
+  var send_data = {'ewallet_rapyd_id':ewallet_rapyd_id};
+  //sent_data = $('form#my_app1').serializeArray().map(function(x){data[x.name] = x.value;});
+  console.log("----------------the data----------------")
+  console.log(send_data)
+  $.post( '/ind/wallet', send_data , function(data) {
+    // ... do something with response from server
+    //alert(data)
+    //$('body').html(data)
+    console.log(data)
+    var myJSON = JSON.stringify(data); 
+    $('#main_card').html(myJSON)
+   
+  }
+   // I expect a JSON response
+);
+}
 
+
+
+
+function retrive_vbank(ewallet_rapyd_id) {
+  //ewallet_rapyd_id =  $(this).attr('ewallet_rapyd_id')
+  var send_data = {'ewallet_rapyd_id':ewallet_rapyd_id};
+  //sent_data = $('form#my_app1').serializeArray().map(function(x){data[x.name] = x.value;});
+  console.log("----------------the data----------------")
+  console.log(send_data)
+  $.post( '/ind/wallet', send_data , function(data) {
+    // ... do something with response from server
+    //alert(data)
+    //$('body').html(data)
+    console.log(data)
+    var myJSON = JSON.stringify(data); 
+    $('#main_card').html(myJSON)
+   
+  }
+   // I expect a JSON response
+);
+}
 
 
 

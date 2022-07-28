@@ -18,7 +18,7 @@ def list_wallets( ewallet_reference_id):
     return results.json()
 
 
-def retrive_wallets(wallet_id):
+def retrive_wallet(wallet_id):
     http_method = 'get'                   # get|put|post|delete - must be lowercase
     path = '/v1/user/'
 
