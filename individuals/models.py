@@ -52,6 +52,25 @@ class AccountsManager(BaseUserManager):
 
 
 
+class Wallet(models.Model):
+
+    wallet_type_CHOICES = [
+        ('person', 'Person'), # One personal contact.
+        ('company', 'Company'), # One business contact and multiple personal contacts.
+        ('client', 'Client'), #  Each client wallet has one business contact and multiple personal contacts.
+    
+    ]
+
+    type_of_wallet = models.CharField(max_length=10, choices=wallet_type_CHOICES, default='person')
+
+    ewallet_reference_id = models.CharField(max_length=100)
+    ewallet_rapyd_id = models.CharField(max_length=80, blank=True) # returned value
+
+    def set_ref_id(self,first_name, last_name):
+        #ref = self.contact.first_name+"-"+self.contact.last_name+"-"+ str(datetime.datetime.now())
+        ref = first_name+"-"+last_name+"-"+ str(self.id)
+        self.ewallet_reference_id = ref
+
 
 
 
@@ -107,6 +126,7 @@ class Account(AbstractBaseUser):
     
     objects = AccountsManager()
     USERNAME_FIELD = 'email'
+    wallets = models.ManyToManyField(Wallet)
 
     REQUIRED_FIELDS =[]  
     #                    ['first_name', 
@@ -142,23 +162,3 @@ class Account(AbstractBaseUser):
 
 
 
-
-
-class Wallet(models.Model):
-
-    wallet_type_CHOICES = [
-        ('person', 'Person'), # One personal contact.
-        ('company', 'Company'), # One business contact and multiple personal contacts.
-        ('client', 'Client'), #  Each client wallet has one business contact and multiple personal contacts.
-    
-    ]
-
-    type_of_wallet = models.CharField(max_length=10, choices=wallet_type_CHOICES, default='person')
-
-    ewallet_reference_id = models.CharField(max_length=100)
-    ewallet_rapyd_id = models.CharField(max_length=80, blank=True) # returned value
-
-    contact = models.OneToOneField(Account,on_delete=models.CASCADE)
-    def set_ref_id(self,):
-        ref = self.contact.first_name+"-"+self.contact.last_name+"-"+ str(datetime.datetime.now())
-        self.ewallet_reference_id = ref
