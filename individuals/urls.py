@@ -19,7 +19,9 @@ urlpatterns = [
     
     path("wallet", views.retrive_wallet, name="retrive_wallet"),
     
-    path("vbank", views.list_vbank, name="retrive_wallet"),
+    path("vbank", views.list_vbank, name="list_vbank"),
+    
+    path("make", views.make_deposit, name="make_deposit"),
     #path("contact/<pk>/", views.contact_detail, name="contact_detail"),
     
     

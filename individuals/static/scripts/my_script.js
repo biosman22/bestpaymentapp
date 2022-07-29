@@ -301,6 +301,9 @@ function pretty_info2(data, title) {
   <div class="p-3 ">
   <div class="text-center">
   <h5 class="mt-3">${title} </h5>
+  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+  <button type="button" class="btn btn-primary">make 100 deposit</button>
+  </div>
   </div>
     <form>`;
   console.log(data)
@@ -342,4 +345,24 @@ function pretty_info2(data, title) {
   
 }
 
+
+function make_deposit(vbank_rapyd_id) {
+  //ewallet_rapyd_id =  $(this).attr('ewallet_rapyd_id')
+  var send_data = {'vbank_rapyd_id':ewallet_rapyd_id};
+  //sent_data = $('form#my_app1').serializeArray().map(function(x){data[x.name] = x.value;});
+  console.log("----------------the data----------------")
+  console.log(send_data)
+  $.post( '/ind/make', send_data , function(data) {
+    // ... do something with response from server
+    //alert(data)
+    //$('body').html(data)
+    console.log(data)
+    //var myJSON = JSON.stringify(data); 
+    //all = pretty_info2(data.data, title)
+    //$('#main_card').html($(all))
+   
+  }
+   // I expect a JSON response
+);
+}
 

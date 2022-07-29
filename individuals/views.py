@@ -16,6 +16,7 @@ from .models import *
 
 from .lazy_encoder import LazyEncoder
 
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 import json
 # Create your views here.
@@ -215,7 +216,7 @@ def main_page(request):
 		#account = json.loads(account_text)[0]
 		#print(account)
 		#print(request.account)
-		vbank.bank_deposit("issuing_348351c6c69bbacb9c8425082cc2378c")
+		#vbank.bank_deposit("issuing_348351c6c69bbacb9c8425082cc2378c")
 		return render(request,'soft/profile.html',{ 'account':account, 'wallets': wallets,'vbank_accounts':vbank_accounts})
 	
 	return render(request,'soft/main.html')
@@ -242,9 +243,12 @@ def log_me_in(request):
 
 		if email is not None and password is not None:
 
-			the_account = Account.objects.get(email=email.lower())
-			print(the_account.is_active )
-			account = authenticate(email=email, password=password)
+			try:
+				the_account = Account.objects.get(email=email.lower())
+				print(the_account.is_active )
+				account = authenticate(email=email, password=password)
+			except ObjectDoesNotExist :
+				account = None
 			if account is not None:
 				login(request, account)
 				
@@ -293,3 +297,11 @@ def list_vbank(request):
 	wallet_rapyd_id = request_body.get('ewallet_rapyd_id')
 	print(wallet_rapyd_id)
 	return JsonResponse(vbank.list_virtual_accounts(wallet_rapyd_id))
+
+
+def make_deposit(request):
+	request_body = request.POST
+	print(request_body)
+	vbank_id = request_body.get('vbank_rapyd_id')
+	print(vbank_id)
+	deposit_response =  vbank.bank_deposit(vbank_id)
