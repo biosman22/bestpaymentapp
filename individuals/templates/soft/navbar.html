@@ -21,7 +21,7 @@
                 <img src="{% static 'soft/assets/img/down-arrow-dark.svg' %}" alt="down-arrow" class="arrow ms-1">
               </a>
               <div class="dropdown-menu dropdown-menu-animation dropdown-md p-3 border-radius-lg mt-0 mt-lg-3" aria-labelledby="dropdownMenuPages">
-    <div class="d-none d-lg-block">
+                <div class="d-none d-lg-block">
       <div class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center px-0">
         <div class="d-inline-block">
           <div class="icon icon-shape icon-xs border-radius-md bg-gradient-primary text-center me-2 d-flex align-items-center justify-content-center">
@@ -38,7 +38,8 @@
       
 
     </div>
-    <div class="d-lg-none">
+
+    <div class="row d-lg-none">
       <div class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center px-0">
         <div class="d-inline-block">
           <div class="icon icon-shape icon-xs border-radius-md bg-gradient-primary text-center me-2 d-flex align-items-center justify-content-center">
@@ -47,15 +48,14 @@
         </div>
         All Wallets
       </div>
+      {% for a_wallet in wallets %}
+      <a href="javascript:void(0)" class="dropdown-item border-radius-md" onclick="retrive_wallet(`{{a_wallet.ewallet_rapyd_id}}`)" ewallet_rapyd_id ="{{a_wallet.ewallet_rapyd_id}}" ewallet_reference_id="{{a_wallet.ewallet_reference_id}}">
+        <span class="ps-3">My Wallet {{ forloop.counter }} {{a_wallet.accounts.0.currency}}</span>
+      </a>
+      {% endfor %}
+      
+
     </div>
-    {% for a_wallet in wallets %}
-    <a href="javascript:void(0)" class="dropdown-item border-radius-md" onclick="retrive_wallet(`{{a_wallet.ewallet_rapyd_id}}`)" ewallet_rapyd_id ="{{a_wallet.ewallet_rapyd_id}}" ewallet_reference_id="{{a_wallet.ewallet_reference_id}}">
-      <span class="ps-3">My Wallet {{ forloop.counter }} {{a_wallet.accounts.0.currency}}</span>
-    </a>
-    {% endfor %}
-    </div>
-    
-    
     
             </li>
   <!--  --------------------------------------- -->
@@ -89,8 +89,8 @@
     
     <div class="row d-lg-none">
       <div class="col-md-12 g-0">
-        {% for vbank_account in vbank_accounts %}
-        <li class="nav-item list-group-item border-0 p-0">
+         {% for vbank_account in vbank_accounts %}
+        
           <a class="dropdown-item py-2 ps-3 border-radius-md" href="javascript:void(0)">
             <div class="d-flex">
               <div class="icon h-10 me-3 d-flex mt-1">
@@ -102,7 +102,7 @@
               </div>
             </div>
           </a>
-        </li>
+        
         {% endfor %}
       </div>
     </div>
