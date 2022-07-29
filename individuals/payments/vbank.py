@@ -28,25 +28,28 @@ def create_virtual_bank_account(ewallet_rapyd_id, country_code,currency):
 
 
 
-def list_virtual_accounts():
+def list_virtual_accounts(wallet_id):
 
-    wallet_id = f'ewallet_87f92e979eda240f859d33d25b58b4ee'
-    results = call_api('get', path=f'/v1/issuing/bankaccounts/list?ewallet='+wallet_id)
+    results = call_api('get', path=f'/v1/issuing/bankaccounts/list?ewallet='+ wallet_id)
     
     print("all virtual accouns")
 
     print(results.json())
 
+    return results.json()
 
-def bank_deposit():
+
+def bank_deposit(issuing_id):
     body = json.dumps({
-	"issued_bank_account": "issuing_5ab20620229c02a7335258d699701d0e",
+	"issued_bank_account": issuing_id,
 	"amount": "100",
 	"currency": "GBP"
     }, separators=(',', ':'))
    
     results = call_api('post', path=f'/v1/issuing/bankaccounts/bankaccounttransfertobankaccount', body=body)
     
-    print("all virtual accouns")
+    print("bank deposit")
 
     print(results.json())
+
+    return results.json()

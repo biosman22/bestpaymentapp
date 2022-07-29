@@ -186,3 +186,18 @@ class Vbank_account(models.Model):
 
     wallet =  models.ForeignKey(Wallet, on_delete=models.CASCADE)
 
+
+
+
+
+
+class Transaction(models.Model):
+    vbank_account =  models.ForeignKey(Wallet, on_delete=models.CASCADE)
+    
+    rapyd_id =  models.CharField(max_length=100 )
+    amount =  models.CharField(max_length=10)
+    currency = models.CharField(max_length=5)
+
+
+    #{'id': 'issuing_348351c6c69bbacb9c8425082cc2378c', 'merchant_reference_id': 'issuing_348351c6c69bbacb9c8425082cc2378c', 'ewallet': 'ewallet_adab89ee81d8091f3f918f86fe64eefa', 'bank_account': {'beneficiary_name': 'CashDash UK Limited', 'address': 'Northwest House, 119 Marylebone Road NW1 5PU', 'country_iso': 'GB', 'iban': 'GB36SAPY60838292780648', 'sort_code': '608382', 'account_no': '0092780648', 'bic': 'SAPYGB2L'}, 'metadata': {}, 'status': 'ACT', 'description': 'Issue test bank account', 'funding_instructions': None, 'currency': 'GBP', 'transactions': [{'id': 'isutran_e3d96e453e20b7c4a21aecca73351ce0', 'amount': 100, 'currency': 'GBP', 'created_at': 1659108204}]}
+

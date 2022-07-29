@@ -18,6 +18,8 @@ urlpatterns = [
     path("logout", views.log_me_out, name="logout"),
     
     path("wallet", views.retrive_wallet, name="retrive_wallet"),
+    
+    path("vbank", views.list_vbank, name="retrive_wallet"),
     #path("contact/<pk>/", views.contact_detail, name="contact_detail"),
     
     

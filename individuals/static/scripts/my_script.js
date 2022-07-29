@@ -202,20 +202,17 @@ function validate_send() {
 }
 
 
-function retrive_wallet(ewallet_rapyd_id) {
-  //ewallet_rapyd_id =  $(this).attr('ewallet_rapyd_id')
+function retrive_wallet(ewallet_rapyd_id, title) {
   var send_data = {'ewallet_rapyd_id':ewallet_rapyd_id};
   //sent_data = $('form#my_app1').serializeArray().map(function(x){data[x.name] = x.value;});
   console.log("----------------the data----------------")
   console.log(send_data)
   $.post( '/ind/wallet', send_data , function(data) {
-    // ... do something with response from server
-    //alert(data)
-    //$('body').html(data)
-    console.log(data)
-    var myJSON = JSON.stringify(data); 
-    $('#main_card').html(myJSON)
-   
+
+    console.log(data);
+    all = pretty_info(data.data, title);
+    //all = pretty_info(myJSON["data"]);
+    $('#main_card').html(all);
   }
    // I expect a JSON response
 );
@@ -224,19 +221,20 @@ function retrive_wallet(ewallet_rapyd_id) {
 
 
 
-function retrive_vbank(ewallet_rapyd_id) {
+function retrive_vbank(ewallet_rapyd_id, title) {
   //ewallet_rapyd_id =  $(this).attr('ewallet_rapyd_id')
   var send_data = {'ewallet_rapyd_id':ewallet_rapyd_id};
   //sent_data = $('form#my_app1').serializeArray().map(function(x){data[x.name] = x.value;});
   console.log("----------------the data----------------")
   console.log(send_data)
-  $.post( '/ind/wallet', send_data , function(data) {
+  $.post( '/ind/vbank', send_data , function(data) {
     // ... do something with response from server
     //alert(data)
     //$('body').html(data)
     console.log(data)
-    var myJSON = JSON.stringify(data); 
-    $('#main_card').html(myJSON)
+    //var myJSON = JSON.stringify(data); 
+    all = pretty_info2(data.data, title)
+    $('#main_card').html($(all))
    
   }
    // I expect a JSON response
@@ -245,6 +243,103 @@ function retrive_vbank(ewallet_rapyd_id) {
 
 
 
+function pretty_info(data, title) {
+  header = `
+  <div class="p-3 ">
+  <div class="text-center">
+  <h5 class="mt-3">${title} </h5>
+  </div>
+    <form>`;
+  console.log(data)
+  body="";
+  for(var key of Object.keys(data)){
+    pretty_label = key.replace("_", " ");
 
+    
+    if(key == "contacts"){
+      data[key]['data'].forEach(element => {
+        
+      
+      body += `<hr class="bg-primary border-2 border-top border-primary"></hr>`;
+      body +=`<div class="">
+      <h6 class="mt-3">${key} </h6>
+      </div>`
+      for(var key2 of Object.keys(element)){
+        
+        pretty_label = key2.replace("_", " ");
+        body += `<div class="form-group">
+          <label for="exampleFormControlInput1">${pretty_label}</label>
+          <input type="text" disabled value="${element[key2]}" class="form-control" id="exampleFormControlInput1" placeholder="not specified">
+        </div>`;
+
+
+      }
+      body += `<hr class="bg-primary border-2 border-top border-primary"></hr>`
+      });
+
+    }
+    else if (key != "id" && key != "metadata" && key != "category"  && key != "accounts" &&  key != "contacts"){
+      body += `<div class="form-group">
+          <label for="exampleFormControlInput1">${pretty_label}</label>
+          <input type="text" disabled value="${data[key]}" class="form-control" id="exampleFormControlInput1" placeholder="not specified">
+        </div>`;
+    }
+  }
+
+  footer = `</form>
+  </div>`;
+  //console.log(body)
+  all = header + body + footer
+  return all
+  
+}
+
+
+
+function pretty_info2(data, title) {
+  header = `
+  <div class="p-3 ">
+  <div class="text-center">
+  <h5 class="mt-3">${title} </h5>
+  </div>
+    <form>`;
+  console.log(data)
+  body="";
+  for(var key of Object.keys(data)){
+    pretty_label = key.replaceAll("_", " ");
+
+    if(key == "bank_accounts"){
+      body += `<hr class="bg-primary border-2 border-top border-primary"></hr>`;
+      body +=`<div class="">
+      <h6 class="mt-3">${key} </h6>
+      </div>`
+      for(var key2 of Object.keys(data[key][0])){
+        
+        pretty_label = key2.replace("_", " ");
+        body += `<div class="form-group">
+          <label for="exampleFormControlInput1">${pretty_label}</label>
+          <input type="text" disabled value="${data[key][0][key2]}" class="form-control" id="exampleFormControlInput1" placeholder="not specified">
+        </div>`;
+
+
+      }
+      body += `<hr class="bg-primary border-2 border-top border-primary"></hr>`
+
+    }
+    else if (key != "id" && key != "metadata" && key != "category"  && key != "accounts" && key != "bank_accounts"){
+      body += `<div class="form-group">
+          <label for="exampleFormControlInput1">${pretty_label}</label>
+          <input type="text" disabled value="${data[key]}" class="form-control" id="exampleFormControlInput1" placeholder="not specified">
+        </div>`;
+    }
+  }
+
+  footer = `</form>
+  </div>`;
+  //console.log(body)
+  all = header + body + footer
+  return all
+  
+}
 
 

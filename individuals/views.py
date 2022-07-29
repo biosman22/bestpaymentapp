@@ -215,6 +215,7 @@ def main_page(request):
 		#account = json.loads(account_text)[0]
 		#print(account)
 		#print(request.account)
+		vbank.bank_deposit("issuing_348351c6c69bbacb9c8425082cc2378c")
 		return render(request,'soft/profile.html',{ 'account':account, 'wallets': wallets,'vbank_accounts':vbank_accounts})
 	
 	return render(request,'soft/main.html')
@@ -283,3 +284,12 @@ def retrive_wallet(request):
 	wallet_rapyd_id = request_body.get('ewallet_rapyd_id')
 	print(wallet_rapyd_id)
 	return JsonResponse(wallet.retrive_wallet(wallet_rapyd_id))
+
+
+
+def list_vbank(request):
+	request_body = request.POST
+	print(request_body)
+	wallet_rapyd_id = request_body.get('ewallet_rapyd_id')
+	print(wallet_rapyd_id)
+	return JsonResponse(vbank.list_virtual_accounts(wallet_rapyd_id))

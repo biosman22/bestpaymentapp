@@ -31,7 +31,7 @@
         All Wallets
       </div>
       {% for a_wallet in wallets %}
-      <a href="javascript:void(0)" class="dropdown-item border-radius-md" onclick="retrive_wallet(`{{a_wallet.ewallet_rapyd_id}}`)" ewallet_rapyd_id ="{{a_wallet.ewallet_rapyd_id}}" ewallet_reference_id="{{a_wallet.ewallet_reference_id}}">
+      <a href="javascript:void(0)" class="dropdown-item border-radius-md" onclick="retrive_wallet(`{{a_wallet.ewallet_rapyd_id}}`, `My Wallet {{ forloop.counter }} `)" >
         <span class="ps-3">My Wallet {{ forloop.counter }} {{a_wallet.accounts.0.currency}}</span>
       </a>
       {% endfor %}
@@ -49,7 +49,7 @@
         All Wallets
       </div>
       {% for a_wallet in wallets %}
-      <a href="javascript:void(0)" class="dropdown-item border-radius-md" onclick="retrive_wallet(`{{a_wallet.ewallet_rapyd_id}}`)" ewallet_rapyd_id ="{{a_wallet.ewallet_rapyd_id}}" ewallet_reference_id="{{a_wallet.ewallet_reference_id}}">
+      <a href="javascript:void(0)" class="dropdown-item border-radius-md" onclick="retrive_wallet(`{{a_wallet.ewallet_rapyd_id}}`, `My Wallet {{ forloop.counter }} `)" >
         <span class="ps-3">My Wallet {{ forloop.counter }} {{a_wallet.accounts.0.currency}}</span>
       </a>
       {% endfor %}
@@ -70,14 +70,14 @@
       <ul class="list-group">
         {% for vbank_account in vbank_accounts %}
         <li class="nav-item list-group-item border-0 p-0">
-          <a class="dropdown-item py-2 ps-3 border-radius-md" href="javascript:void(0)">
+          <a class="dropdown-item py-2 ps-3 border-radius-md" href="javascript:void(0)" onclick="retrive_vbank(`{{vbank_account.ewallet_rapyd_id}}`, `{{vbank_account.beneficiary_name}}`)"  >
             <div class="d-flex">
               <div class="icon h-10 me-3 d-flex mt-1">
                
               </div>
               <div>
                 <h6 class="dropdown-header text-dark font-weight-bolder d-flex justify-content-cente align-items-center p-0">{{vbank_account.beneficiary_name}}<h6></h6>
-                <span class="text-sm"> Country: {{vbank_account.country_iso}}   Currency: {{vbank_account.currency}}</span>
+                <span class="text-sm"> Country: {{vbank_account.country_iso}} </span> <span class="text-sm align-right"> Currency: {{vbank_account.currency}}</span>
               </div>
             </div>
           </a>
@@ -91,7 +91,7 @@
       <div class="col-md-12 g-0">
          {% for vbank_account in vbank_accounts %}
         
-          <a class="dropdown-item py-2 ps-3 border-radius-md" href="javascript:void(0)">
+          <a class="dropdown-item py-2 ps-3 border-radius-md" href="javascript:void(0)" onclick="retrive_vbank(`{{vbank_account.ewallet_rapyd_id}}`, `{{vbank_account.beneficiary_name}}`)">
             <div class="d-flex">
               <div class="icon h-10 me-3 d-flex mt-1">
                
