@@ -53,3 +53,15 @@ def bank_deposit(issuing_id):
     print(results.json())
 
     return results.json()
+
+
+
+def retrieve_history(vbank_id):
+    http_method = 'get'                   # get|put|post|delete - must be lowercase
+    path = '/v1/issuing/bankaccounts/'+ vbank_id
+
+    results = call_api(http_method, path=path )
+
+    #print(results.json())
+    return results.json()
+

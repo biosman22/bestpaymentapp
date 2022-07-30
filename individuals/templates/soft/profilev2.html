@@ -1,0 +1,131 @@
+{% extends 'soft/base.html' %}
+
+{% block content %}
+
+{% include 'soft/navbar.html' %}
+
+{% load static %}
+<header class="header-2 ">
+  <div class="page-header min-vh-75 relative" style="background-image: url({% static '/soft/assets/img/curved-images/curved.jpg' %})">
+    <div class="container ">
+      <div class="row">
+        <div class="col-lg-7 text-center mx-auto">
+          <h1 class="text-white pt-3 mt-n5">Hi {{account.first_name}} {{account.last_name}} </h1>
+          <p class="lead text-white mt-3">Here you can <br/> Maintain your account </p>
+        </div>
+      </div>
+    </div>
+
+    <!--div class="position-absolute w-100 z-index-1 bottom-0">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 40" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="moving-waves">
+          <use xlink:href="#gentle-wave" x="48" y="-1" fill="rgba(255,255,255,0.40" />
+          <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.35)" />
+          <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.25)" />
+          <use xlink:href="#gentle-wave" x="48" y="8" fill="rgba(255,255,255,0.20)" />
+          <use xlink:href="#gentle-wave" x="48" y="13" fill="rgba(255,255,255,0.15)" />
+          <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0.95" />
+        </g>
+      </svg>
+    </div>
+  </div-->
+</header>
+
+
+
+<section class="pt-3 pb-4  " id="count-stats">
+      
+  <div class="container ">
+    <div class="row ">
+<div class="col-md-6 z-index-2  mt-n10 mx-auto py-3 " id="main_card">
+  
+  <div class="card m-4  border-radius-xl   blur shadow-blur" >
+    <div class="card-header p-0 mx-3 mt-3 position-relative z-index-1">
+      
+    </div>
+  
+    <div class="card-body pt-2">
+      <a href="javascript:;" class="card-title h5 d-block text-darker">
+        Balance
+      </a>
+      <h2  class="card-description mb-4" style="white-space: nowrap;" >
+        {{balances.0.balance}} {{balances.0.currency}} 
+        <span class="text-gradient text-primary text-uppercase text-xs font-weight-bold my-2">Available</span>
+      </h2>
+
+      <div class=" align-items-center mx-4">
+        <div class="name ps-3">
+          
+          {% for balance in balances %}
+          <div style="display: flex; align-items:flex-end;">
+          <div class="flex">{{balance.currency}} </div> 
+          <div class="dots"></div>
+          <span class=" me-1 ">{{balance.balance}} {{balance.currency}} </span>
+          </div>
+          {% endfor %}
+          
+          <div class="stats">
+            <small>For each, currency you will see different balance</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% load timestamp_to_time %}
+<div class="col-md-6 z-index-2  mt-n10 mx-auto py-3 " id="main_card">
+  
+  <div class="card m-4  border-radius-xl   blur shadow-blur" >
+    <div class="card-header p-0 mx-3 mt-3 position-relative z-index-1">
+      
+    </div>
+  
+    <div class="card-body pt-2">
+      <a href="javascript:;" class="card-title h5 d-block text-darker">
+        Transactions
+      </a>
+      <h2  class="card-description mb-4" style="white-space: nowrap;" >
+        {{transactions.0.amount}} {{transactions.0.currency}} 
+        <span class="text-gradient text-primary text-uppercase text-xs font-weight-bold my-2">last received</span>
+      </h2>
+
+      <div class=" align-items-center mx-4">
+        <div class="name ps-3">
+          
+          {% for transaction in transactions %}
+          <div style="display: flex; align-items:flex-end;">
+          <div class="flex">{{transaction.amount}} {{transaction.currency}}</div> 
+          <div class="dots"></div>
+          <span class="  ">{{ transaction.created_at|timestamp_to_time|date:"jS N, Y"  }} </span>
+          </div>
+          
+          <small></small>
+          <hr class="bg-primary border-2 border-top border-primary"></hr>
+          {% endfor %}
+          
+          <div class="stats">
+            <small>For each, currency you will see different balance</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+{% endblock %}
+
+
+
+
+
+{% block script %}
+<script>
+
+</script>
+{% endblock %}

@@ -99,3 +99,27 @@ def delete_wallet(wallet_id):
     #print(r.json())
 
     return r.json()
+
+
+
+
+def retrive_balances(wallet_id):
+    http_method = 'get'                   # get|put|post|delete - must be lowercase
+    path = '/v1/user/'+wallet_id+'/accounts'
+
+    results = call_api(http_method, path=path )
+
+    #print(results.json())
+    return results.json()
+
+
+def list_transactions(wallet_id):
+    http_method = 'get'                   # get|put|post|delete - must be lowercase
+    path = '/v1/user/'+wallet_id+'/transactions'
+
+    results = call_api(http_method, path=path )
+
+    #print(results.json())
+    return results.json()
+
+

@@ -202,22 +202,43 @@ def main_page(request):
 		wallets = account.wallets.all()
 		vbank_accounts = set()
 		for a_wallet in wallets:
-			wallet_details = wallet.list_wallets(a_wallet.ewallet_reference_id)['data'][0]
-			print(wallet_details)
-			all_wallets.append(wallet_details)
+			#Rapyd Api
+			#wallet_details = wallet.list_wallets(a_wallet.ewallet_reference_id)['data'][0]
+			#print(wallet_details)
+			#all_wallets.append(wallet_details)
 
 			print("----------------- virtual bank accounts----------------")
 			for a_vbank in a_wallet.vbank_account_set.all():
 				vbank_accounts.add(a_vbank)
+				vbank_history = vbank.retrieve_history( a_vbank.rapyd_id)
+				print('vbank_history')
+				print(vbank_history)
 			
 
 			print(	a_wallet.vbank_account_set.all())
 		print(vbank_accounts)
+
+		balances  = wallet.retrive_balances(a_wallet.ewallet_rapyd_id)
+		print('balances')
+		print(balances)
+		
+
+		all_wallet_transactions =  wallet.list_transactions(a_wallet.ewallet_rapyd_id)
+
+		print('all_wallet_transactions')
+		print(all_wallet_transactions)
 		#account = json.loads(account_text)[0]
 		#print(account)
 		#print(request.account)
 		#vbank.bank_deposit("issuing_348351c6c69bbacb9c8425082cc2378c")
-		return render(request,'soft/profile.html',{ 'account':account, 'wallets': wallets,'vbank_accounts':vbank_accounts})
+
+		context = { 'account':account,
+					'wallets': wallets,
+					'vbank_accounts':vbank_accounts,
+					'balances':balances['data'],
+					'transactions':all_wallet_transactions['data'][:5],}
+
+		return render(request,'soft/profilev2.html', context)
 	
 	return render(request,'soft/main.html')
 		

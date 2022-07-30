@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     #'ind',
     'individuals.apps.IndividualsConfig',
     'crispy_forms',
+    'individuals.templatetags',
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 MIDDLEWARE = [

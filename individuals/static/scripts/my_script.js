@@ -302,7 +302,7 @@ function pretty_info2(data, title) {
   <div class="text-center">
   <h5 class="mt-3">${title} </h5>
   <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-  <button type="button" class="btn btn-primary">make 100 deposit</button>
+  <button type="button" class="btn btn-primary" onclick="make_deposit('${data["bank_accounts"][0]['issuing_id']}')">make 100 deposit</button>
   </div>
   </div>
     <form>`;
@@ -348,7 +348,7 @@ function pretty_info2(data, title) {
 
 function make_deposit(vbank_rapyd_id) {
   //ewallet_rapyd_id =  $(this).attr('ewallet_rapyd_id')
-  var send_data = {'vbank_rapyd_id':ewallet_rapyd_id};
+  var send_data = {'vbank_rapyd_id':vbank_rapyd_id};
   //sent_data = $('form#my_app1').serializeArray().map(function(x){data[x.name] = x.value;});
   console.log("----------------the data----------------")
   console.log(send_data)
