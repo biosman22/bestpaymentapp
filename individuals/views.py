@@ -309,6 +309,9 @@ def retrive_wallet(request):
 	wallet_rapyd_id = request_body.get('ewallet_rapyd_id')
 	print(wallet_rapyd_id)
 	return JsonResponse(wallet.retrive_wallet(wallet_rapyd_id))
+	# context = {"a_wallet" : wallet.retrive_wallet(wallet_rapyd_id)['data']}
+	# print(context)
+	# return render(request, "soft/wallet.html", context )
 
 
 

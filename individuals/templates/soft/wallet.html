@@ -1,0 +1,55 @@
+
+
+  {% load timestamp_to_time %}
+  <div class="col-md-12 z-index-2  mt-n10 mx-auto py-3 " id="main_card">
+    
+  <div class="card m-4  border-radius-xl   blur shadow-blur">
+    <div class="table-responsive">
+      <table class="table align-items-center mb-0">
+        <thead>
+          <tr>
+            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Owner</th>
+            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Phone </th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Ewallet Reference</th>
+            <th class="text-secondary opacity-7"></th>
+          </tr>
+        </thead>
+        <tbody>
+        
+          <tr>
+            <td>
+              <div class="d-flex px-2 py-1">
+                <div>
+                  <img src="https://demos.creative-tim.com/soft-ui-design-system-pro/assets/img/team-2.jpg" class="avatar avatar-sm me-3">
+                </div>
+                <div class="d-flex flex-column justify-content-center">
+                  <h6 class="mb-0 text-xs">{{a_wallet.contact.0.first_name}} {{a_wallet.contact.0.first_name}}</h6>
+                  <p class="text-xs text-secondary mb-0">{{a_wallet.contacts.0.email}}</p>
+                </div>
+              </div>
+            </td>
+            <td>
+              <p class="text-xs font-weight-bold mb-0">{{a_wallet.phone_number}}</p>
+              <p class="text-xs text-secondary mb-0">{{a_wallet_ewallet_reference_id}}</p>
+            </td>
+            <td class="align-middle text-center text-sm">
+              <span class="badge badge-sm badge-success">{{a_wallet.status}}</span>
+            </td>
+            <td class="align-middle text-center">
+              <span class="text-secondary text-xs font-weight-bold">23/04/18</span>
+            </td>
+            <td class="align-middle">
+              <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                Edit
+              </a>
+            </td>
+          </tr>
+          
+  
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  </div>

@@ -183,7 +183,7 @@ function csrfSafeMethod(method) {
 
 
 
-function validate_send() {
+function validate_sen_old() {
   sent_data = $('form#my_app1').serialize()
   //var data = {};
   //sent_data = $('form#my_app1').serializeArray().map(function(x){data[x.name] = x.value;});
@@ -202,6 +202,28 @@ function validate_send() {
 }
 
 
+
+function validate_send() {
+  //alert("testy")
+  //$('#loading').hide()
+//   $(document). insertAfter(`<div class="my_overlay">
+//   <div class="d-flex justify-content-center">
+//   <div class="spinner-border" role="status">
+//     <span class="visually-hidden">Loading...</span>
+//   </div>
+// </div>
+// </div>`)
+
+$("#loading").css("display", "block");
+return true
+  //sent_data = $('form#my_app1').submit()
+  //var data = {};
+  //sent_data = $('form#my_app1').serializeArray().map(function(x){data[x.name] = x.value;});
+  //console.log("----------------the data----------------")
+  //console.log(sent_data)
+
+}
+
 function retrive_wallet(ewallet_rapyd_id, title) {
   var send_data = {'ewallet_rapyd_id':ewallet_rapyd_id};
   //sent_data = $('form#my_app1').serializeArray().map(function(x){data[x.name] = x.value;});
@@ -213,6 +235,7 @@ function retrive_wallet(ewallet_rapyd_id, title) {
     all = pretty_info(data.data, title);
     //all = pretty_info(myJSON["data"]);
     $('#main_card').html(all);
+    //$('#main_card').html(data);
   }
    // I expect a JSON response
 );
@@ -245,6 +268,11 @@ function retrive_vbank(ewallet_rapyd_id, title) {
 
 function pretty_info(data, title) {
   header = `
+  
+  <div class="col-md-12 z-index-2  mt-n10 mx-auto py-3 " id="inside_card">
+  
+  <div class="card m-4  border-radius-xl   blur shadow-blur">
+
   <div class="p-3 ">
   <div class="text-center">
   <h5 class="mt-3">${title} </h5>
@@ -287,6 +315,8 @@ function pretty_info(data, title) {
   }
 
   footer = `</form>
+  </div>
+  </div>
   </div>`;
   //console.log(body)
   all = header + body + footer
@@ -298,6 +328,10 @@ function pretty_info(data, title) {
 
 function pretty_info2(data, title) {
   header = `
+  
+  <div class="col-md-12 z-index-2  mt-n10 mx-auto py-3 " id="inside_card">
+  
+  <div class="card m-4  border-radius-xl   blur shadow-blur">
   <div class="p-3 ">
   <div class="text-center">
   <h5 class="mt-3">${title} </h5>
@@ -338,6 +372,8 @@ function pretty_info2(data, title) {
   }
 
   footer = `</form>
+  </div>
+  </div>
   </div>`;
   //console.log(body)
   all = header + body + footer
@@ -357,6 +393,7 @@ function make_deposit(vbank_rapyd_id) {
     //alert(data)
     //$('body').html(data)
     console.log(data)
+    alert("Done")
     //var myJSON = JSON.stringify(data); 
     //all = pretty_info2(data.data, title)
     //$('#main_card').html($(all))
