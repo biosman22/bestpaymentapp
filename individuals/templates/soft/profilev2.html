@@ -123,7 +123,7 @@
 <section>
   <div class="container ">
     <div class="row "  id="main_card">
-      <button class="btn btn-icon btn-2 btn-primary" type="button">
+      <button class="btn btn-icon btn-2 btn-primary" type="button" onclick="toggle_it()">
         <span class="btn-inner--icon"><i class="ni ni-bulb-61"></i></span>
         <span class="btn-inner--text"> Buy a ticket </span>
       </button>
@@ -131,6 +131,67 @@
     </div>
   </div>
 </section>
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Simulation</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="bob_modal_body">
+        
+        
+          <div class="form-group">
+            <div class="row align-items-end">
+              <div class="col ">
+            <label for="country_list"> Select Country</label>
+            <select required name="country_code" class="form-control" id="country_list2">
+              <option value="" selected disabled hidden>Choose here</option>
+              {% for country in countries %}
+              <option value="{{country.iso_alpha2}}"  
+              phone_code ="{{country.phone_code}}" 
+              iso_alpha2="{{country.iso_alpha2}}"
+              currency_code="{{country.currency_code}}"
+              currency_name ="{{country.currency_name}}"
+              currency_sign="{{country.currency_sign}}"
+              country_name = "{{country.name}}">{{country.name}}</option>
+              {% endfor %}
+            </select>
+            </div>
+            <div class="col ">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn bg-gradient-primary " onclick="get_vbank()"   >
+              Get Virtual account
+            </button>
+            </div>
+            <div id="loading2" style="display: none;">
+              <img  src="https://i.ibb.co/S6PwspT/output-onlinegiftools.gif" width="100%" />
+            </div>
+            <div id="my_container">
+
+            </div>
+            
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
+        <!--button type="button" class="btn bg-gradient-primary">Save changes</button-->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 
 {% endblock %}
 
@@ -140,6 +201,104 @@
 
 {% block script %}
 <script>
+var myModal = new bootstrap.Modal(document.getElementById('exampleModal'), {})
+
+function toggle_it() {
+  var country_iso, country_name, city, flag_emoji, currency_code;
+  // fetch('https://api.ipregistry.co/?key=tryout')
+  //   .then(function (response) {
+  //       return response.json();
+  //   })
+  //   .then(function (payload) {
+  //       console.log(payload.location.country.name + ', ' + payload.location.city);
+  //       country_iso = payload.location.country.code;
+  //       country_name = payload.location.country.name;
+  //       city = payload.location.city;
+  //       flag_emoji = payload.location.country.flag.emoji;
+  //       currency_code = payload.currency.code
+
+  //       my_body = ` <p>You are in ${flag_emoji} ${country_name}, ${city}</p>
+  //             <br>
+  //             <p>And your currency is ${currency_code}</p> `;
+  
+  //       $("#bob_modal_body").html(my_body)
+
+
+    // });
+
+
+   
+  myModal.toggle()
+
+  
+}
+
+
+function get_vbank() {
+  $('#my_container').html("")
+  $("#loading2").css("display", "block");
+  var optionSelected = $("option:selected", $('select#country_list2'));
+  country_code = $(optionSelected).attr("iso_alpha2");
+  phone_code = "+"+$(optionSelected).attr("phone_code");
+  currency_code = $(optionSelected).attr("currency_code");
+  country_name = $(optionSelected).attr("country_name");
+  $("input#country_name").val(country_name);
+
+
+  sent_data={
+    'country_iso' : country_code,
+    'country_name': country_name,
+    'currency_code': currency_code,
+    'ewallet_rapyd_id': "{{wallets.0.ewallet_rapyd_id}}"
+  }
+  console.log(sent_data)
+
+  $.post( '/ind/test_vbank', sent_data , function(data) {
+    // ... do something with response from server
+    //alert(data)
+    //$('body').html(data)
+    console.log(data)
+    var myJSON = JSON.stringify(data);
+    $("#loading2").css("display", "none");
+    $('#my_container').html(myJSON)
+
+
+    //window.location="/ind"
+  });
+
+  
+}
+
+
+
+$('select#country_list2').on('change', function (e) {
+  var optionSelected = $("option:selected", this);
+  var valueSelected = this.value;
+  //app2.phone_code = "+"+$(optionSelected).attr("phone_code");
+  country_code = $(optionSelected).attr("iso_alpha2");
+  country_name = $(optionSelected).attr("country_name");
+  $("input#country_name").val(country_name)
+
+
+  sent_data={
+    'country_code' : country_code,
+  }
+
+  $.post( '/ind/list_capabilities', sent_data , function(data) {
+    // ... do something with response from server
+    //alert(data)
+    //$('body').html(data)
+    console.log(data)
+
+    //window.location="/ind"
+  });
+
+  
+    
+});
+
+
+
 
 </script>
 {% endblock %}

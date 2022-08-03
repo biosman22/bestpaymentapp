@@ -65,3 +65,18 @@ def retrieve_history(vbank_id):
     #print(results.json())
     return results.json()
 
+
+
+
+def list_capabilities(country_code):
+    country_code_lower = country_code.lower()
+    print("the failed field")
+    print(country_code_lower)
+    http_method = 'get'                   # get|put|post|delete - must be lowercase
+    path = '/v1/issuing/bankaccounts/capabilities/country='+country_code_lower
+
+    results = call_api(http_method, path=path )
+
+    print(results.json())
+    return results.json()
+

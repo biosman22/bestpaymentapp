@@ -207,36 +207,38 @@ def main_page(request):
 			#print(wallet_details)
 			#all_wallets.append(wallet_details)
 
-			print("----------------- virtual bank accounts----------------")
+			
 			for a_vbank in a_wallet.vbank_account_set.all():
 				vbank_accounts.add(a_vbank)
 				vbank_history = vbank.retrieve_history( a_vbank.rapyd_id)
-				print('vbank_history')
-				print(vbank_history)
+				#print('vbank_history')
+				#print(vbank_history)
 			
 
-			print(	a_wallet.vbank_account_set.all())
+			#print(	a_wallet.vbank_account_set.all())
+		print("----------------- virtual bank accounts----------------")
 		print(vbank_accounts)
 
 		balances  = wallet.retrive_balances(a_wallet.ewallet_rapyd_id)
-		print('balances')
+		print('---------------balances------------------')
 		print(balances)
 		
 
 		all_wallet_transactions =  wallet.list_transactions(a_wallet.ewallet_rapyd_id)
 
-		print('all_wallet_transactions')
+		print('-----------------all_wallet_transactions---------------------')
 		print(all_wallet_transactions)
 		#account = json.loads(account_text)[0]
 		#print(account)
 		#print(request.account)
 		#vbank.bank_deposit("issuing_348351c6c69bbacb9c8425082cc2378c")
-
+		all_countries = rapyd.get_countries()
 		context = { 'account':account,
 					'wallets': wallets,
 					'vbank_accounts':vbank_accounts,
 					'balances':balances['data'],
-					'transactions':all_wallet_transactions['data'][:5],}
+					'transactions':all_wallet_transactions['data'][:5],
+					"countries": all_countries['data'],}
 
 		return render(request,'soft/profilev2.html', context)
 	
@@ -329,3 +331,95 @@ def make_deposit(request):
 	vbank_id = request_body.get('vbank_rapyd_id')
 	print(vbank_id)
 	deposit_response =  vbank.bank_deposit(vbank_id)
+
+
+def test_vbank(request):
+	request_body = request.POST
+	print("--------------------test vbank request ---------------")
+	print(request_body)
+	wallet_rapyd_id = request_body.get('ewallet_rapyd_id')
+	
+	try:
+		a_wallet = Wallet.objects.get(ewallet_rapyd_id=wallet_rapyd_id)
+	except ObjectDoesNotExist:
+		a_wallet = None
+		print("internal DB error")
+		return JsonResponse({"server":"error"})
+
+
+	country_iso = request_body.get('country_iso')
+	currency_code = request_body.get('currency_code')
+
+	print(wallet_rapyd_id)
+	#all_vbanks = vbank.list_virtual_accounts(wallet_rapyd_id)
+	all_vbanks = a_wallet.vbank_account_set.all()
+
+	the_bank_number = None
+	
+	for a_vbank in all_vbanks:
+		
+		if a_vbank.country_iso== country_iso:
+			print("---------------matched-------------------")
+			if a_vbank.iban:
+				the_bank_number = a_vbank.iban
+			elif  a_vbank.account_no:
+				ser_obj =  json.loads(serialize('json', [a_vbank], cls=LazyEncoder))[0]['fields']
+        #return  json.dumps( ser_obj)
+				the_bank_number = json.dumps( ser_obj)
+	
+	if the_bank_number == None :
+		vbank_response = vbank.create_virtual_bank_account(a_wallet.ewallet_rapyd_id, country_iso, currency_code )
+		if vbank_response['status']['status'] =="SUCCESS":
+			vbank_account = Vbank_account()
+			vbank_account.rapyd_id = vbank_response['data']['id']
+			Vbank_account.merchant_reference_id = vbank_response['data']['merchant_reference_id']
+			vbank_account.ewallet_rapyd_id = vbank_response['data']['ewallet']
+			vbank_account.beneficiary_name = vbank_response['data']['bank_account']['beneficiary_name']
+			vbank_account.country_iso = vbank_response['data']['bank_account']['country_iso']
+
+			if  "account_no" in vbank_response['data']['bank_account']:
+				vbank_account.account_no = vbank_response['data']['bank_account']['account_no']
+			elif 'account_number' in vbank_response['data']['bank_account']:
+				vbank_account.account_no = vbank_response['data']['bank_account']['account_number']
+
+
+			if  'address' in vbank_response['data']['bank_account']:
+				vbank_account.address = vbank_response['data']['bank_account']['address']
+
+			if  'iban' in vbank_response['data']['bank_account'] :
+				vbank_account.iban = vbank_response['data']['bank_account']['iban']
+
+			if  'sort_code' in vbank_response['data']['bank_account']:
+				vbank_account.sort_code = vbank_response['data']['bank_account']['sort_code']
+
+			if  'bic' in vbank_response['data']['bank_account']:
+				vbank_account.bic = vbank_response['data']['bank_account']['bic']
+
+
+			vbank_account.status = vbank_response['data']['status']
+			vbank_account.currency = vbank_response['data']['currency']
+			vbank_account.wallet = a_wallet
+			vbank_account.save()
+			the_bank_number = vbank_response['data']
+	
+	
+			#country_capabilities = vbank.list_capabilities(country_iso)
+				
+
+			return JsonResponse({"account_data": the_bank_number })
+		return  JsonResponse({'error': 'currency not supported'})
+
+	return JsonResponse({"account_data": the_bank_number })
+
+{'status': {'error_code': '', 'status': 'SUCCESS', 'message': '', 'response_code': '', 'operation_id': '1dc9e2c9-ec4a-46a0-b133-ab395f1e4d59'}, 'data': {'id': 'issuing_812a6bcb62847b8f713a9029348ce1b4', 'merchant_reference_id': 'issuing_812a6bcb62847b8f713a9029348ce1b4', 'ewallet': 'ewallet_b6ec3fe7475a2595f4e9d05b0cc37a9e', 'bank_account': {'beneficiary_name': 'Rapyd Financial Technology US Inc', 'address': '701 Villa Ave, Mountain View, CA 94041', 'country_iso': 'US', 'country': 'United States', 'aba_routing_number': '051504597', 'account_number': '5002001485351098'}, 'metadata': {}, 'status': 'ACT', 'description': 'Issue test bank account', 'funding_instructions': None, 'currency': 'USD', 'transactions': []}}
+
+
+def list_capabilities(request):
+	
+	request_body = request.POST
+	print(request_body)
+	country_code = request_body.get('country_code')
+	print(country_code)
+
+	cpa_response  = vbank.list_capabilities(country_code)
+	return JsonResponse(cpa_response)

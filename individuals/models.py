@@ -66,7 +66,7 @@ class Wallet(models.Model):
     type_of_wallet = models.CharField(max_length=10, choices=wallet_type_CHOICES, default='person')
 
     ewallet_reference_id = models.CharField(max_length=100)
-    ewallet_rapyd_id = models.CharField(max_length=80, blank=True) # returned value
+    ewallet_rapyd_id = models.CharField(max_length=100, blank=True) # returned value
     
 
     def set_ref_id(self,first_name, last_name):
@@ -173,12 +173,12 @@ class Vbank_account(models.Model):
     ewallet_rapyd_id = models.CharField(max_length=100)
     #account in response
     beneficiary_name = models.CharField(max_length=100 )
-    address = models.CharField(max_length=100)
+    address = models.CharField(max_length=100, blank=True)
     country_iso = models.CharField(max_length=5)
-    iban = models.CharField(max_length=100)
-    sort_code = models.CharField(max_length=20)
+    iban = models.CharField(max_length=100, blank=True)
+    sort_code = models.CharField(max_length=20, blank=True)
     account_no =  models.CharField(max_length=20)
-    bic = models.CharField(max_length=20)
+    bic = models.CharField(max_length=20, blank=True)
     #--- end account
     status = models.CharField(max_length=5)
     currency = models.CharField(max_length=5)

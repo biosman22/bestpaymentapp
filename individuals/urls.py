@@ -22,6 +22,10 @@ urlpatterns = [
     path("vbank", views.list_vbank, name="list_vbank"),
     
     path("make", views.make_deposit, name="make_deposit"),
+    
+    path("test_vbank", views.test_vbank, name="test_vbank"),
+    
+    path("list_capabilities", views.list_capabilities, name="list_capabilities"),
     #path("contact/<pk>/", views.contact_detail, name="contact_detail"),
     
     
