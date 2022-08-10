@@ -1,0 +1,138 @@
+
+<div class="col-auto-md-12 z-index-2  mt-n10 mx-auto py-3 " id="inside_card">
+  
+  <div class="card m-4  border-radius-xl   blur shadow-blur">
+    <div class="p-3 ">
+      <div class="text-center">
+        <h5 class="mt-3">{{vbank.beneficiary_name}} </h5>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <input type="number" class="" id="amount" >
+          <button type="button" class="btn btn-primary" onclick="make_deposit('{{vbank.rapyd_id}}', '{{vbank.currency}}')">make deposit</button>
+        </div>
+      </div>
+      
+
+      <div class="row">
+  <div class="col-auto">
+    Rapyd ID:
+  </div>
+  <div class="col-auto">
+    {{vbank.rapyd_id}}
+  </div>
+</div>
+<div class="row">
+  <div class="col-auto">
+    Merchant Reference ID:
+  </div>
+  <div class="col-auto">
+    {{vbank.merchant_reference_id}}
+  </div>
+</div>
+<div class="row">
+  <div class="col-auto">
+    Ewallet Rapyd ID
+  </div>
+  <div class="col-auto">
+    {{vbank.ewallet_rapyd_id}}
+  </div>
+</div>
+<div class="row">
+  <div class="col-auto">
+    Beneficiary Name:
+  </div>
+  <div class="col-auto">
+    {{vbank.beneficiary_name}}
+  </div>
+</div>
+<div class="row">
+  <div class="col-auto">
+    Country iso:
+  </div>
+  <div class="col-auto">
+    {{vbank.country_iso}}
+  </div>
+</div>
+
+
+{% if vbank.iban %}
+
+<div class="row">
+  <div class="col-auto">
+    Iban:
+  </div>
+  <div class="col-auto">
+    {{vbank.iban}}
+  </div>
+</div>
+{%  endif %}
+
+
+
+{% if vbank.sort_code %}
+<div class="row">
+  <div class="col-auto">
+    Sort Code:
+  </div>
+  <div class="col-auto">
+    {{vbank.sort_code}}
+  </div>
+</div>
+
+{%  endif %}
+
+
+
+{% if vbank.account_no %}
+<div class="row">
+  <div class="col-auto">
+    Account Number:
+  </div>
+  <div class="col-auto">
+    {{vbank.account_no}}
+  </div>
+</div>
+{%  endif %}
+
+
+
+
+{% if vbank.bic %}
+<div class="row">
+  <div class="col-auto">
+    Bic Code:
+  </div>
+  <div class="col-auto">
+    {{vbank.bic}}
+  </div>
+</div>
+
+{%  endif %}
+
+
+
+
+
+
+<div class="row">
+  <div class="col-auto">
+    Status:
+  </div>
+  <div class="col-auto">
+    {{vbank.status}}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-auto">
+    Currency:
+  </div>
+  <div class="col-auto">
+    {{vbank.currency}}
+  </div>
+</div>
+
+
+
+</div>
+</div>
+</div>

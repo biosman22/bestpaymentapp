@@ -244,9 +244,9 @@ function retrive_wallet(ewallet_rapyd_id, title) {
 
 
 
-function retrive_vbank(ewallet_rapyd_id, title) {
+function retrive_vbank(vbank_rapyd_id) {
   //ewallet_rapyd_id =  $(this).attr('ewallet_rapyd_id')
-  var send_data = {'ewallet_rapyd_id':ewallet_rapyd_id};
+  var send_data = {'vbank_rapyd_id':vbank_rapyd_id};
   //sent_data = $('form#my_app1').serializeArray().map(function(x){data[x.name] = x.value;});
   console.log("----------------the data----------------")
   console.log(send_data)
@@ -256,8 +256,9 @@ function retrive_vbank(ewallet_rapyd_id, title) {
     //$('body').html(data)
     console.log(data)
     //var myJSON = JSON.stringify(data); 
-    all = pretty_info2(data.data, title)
-    $('#main_card').html($(all))
+   // 10/8/2022 all = pretty_info2(data.data, title)
+    // 10/8/2022 $('#main_card').html($(all))
+    $('#main_card').html($(data))
    
   }
    // I expect a JSON response
@@ -336,7 +337,8 @@ function pretty_info2(data, title) {
   <div class="text-center">
   <h5 class="mt-3">${title} </h5>
   <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-  <button type="button" class="btn btn-primary" onclick="make_deposit('${data["bank_accounts"][0]['issuing_id']}')">make 100 deposit</button>
+    <input type="number" class="" id="amount" >
+    <button type="button" class="btn btn-primary" onclick="make_deposit('${data["bank_accounts"][0]['issuing_id']}')">make deposit</button>
   </div>
   </div>
     <form>`;
@@ -382,9 +384,10 @@ function pretty_info2(data, title) {
 }
 
 
-function make_deposit(vbank_rapyd_id) {
+function make_deposit(vbank_rapyd_id, currency) {
   //ewallet_rapyd_id =  $(this).attr('ewallet_rapyd_id')
-  var send_data = {'vbank_rapyd_id':vbank_rapyd_id};
+  amount =  $("#amount").val()
+  var send_data = {'vbank_rapyd_id':vbank_rapyd_id, 'amount':  amount, currency};
   //sent_data = $('form#my_app1').serializeArray().map(function(x){data[x.name] = x.value;});
   console.log("----------------the data----------------")
   console.log(send_data)

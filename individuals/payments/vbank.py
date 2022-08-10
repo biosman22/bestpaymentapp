@@ -39,18 +39,15 @@ def list_virtual_accounts(wallet_id):
     return results.json()
 
 
-def bank_deposit(issuing_id):
+def bank_deposit(issuing_id, amount, currency):
     body = json.dumps({
 	"issued_bank_account": issuing_id,
-	"amount": "100",
-	"currency": "GBP"
+	"amount": amount,
+	"currency": currency
     }, separators=(',', ':'))
    
     results = call_api('post', path=f'/v1/issuing/bankaccounts/bankaccounttransfertobankaccount', body=body)
     
-    print("bank deposit")
-
-    print(results.json())
 
     return results.json()
 

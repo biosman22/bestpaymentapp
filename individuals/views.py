@@ -136,22 +136,8 @@ def create_wallet(request):
 			if verification_response['status']['status'] == 'SUCCESS':
 				account.verification_status = 'KYCd'
 				vbank_response = vbank.create_virtual_bank_account(a_wallet.ewallet_rapyd_id, account.country_code, account.currency_code)
-
-				vbank_account = Vbank_account()
-				vbank_account.rapyd_id = vbank_response['data']['id']
-				Vbank_account.merchant_reference_id = vbank_response['data']['merchant_reference_id']
-				vbank_account.ewallet_rapyd_id = vbank_response['data']['ewallet']
-				vbank_account.beneficiary_name = vbank_response['data']['bank_account']['beneficiary_name']
-				vbank_account.address = vbank_response['data']['bank_account']['address']
-				vbank_account.country_iso = vbank_response['data']['bank_account']['country_iso']
-				vbank_account.iban = vbank_response['data']['bank_account']['iban']
-				vbank_account.sort_code = vbank_response['data']['bank_account']['sort_code']
-				vbank_account.account_no = vbank_response['data']['bank_account']['account_no']
-				vbank_account.bic = vbank_response['data']['bank_account']['bic']
-				vbank_account.status = vbank_response['data']['status']
-				vbank_account.currency = vbank_response['data']['currency']
-				vbank_account.wallet = a_wallet
-				vbank_account.save()
+				vbank_account = create_vbank_account_process(a_wallet, vbank_response)
+	
 				
 				#{'status': {'error_code': '', 'status': 'SUCCESS', 'message': '', 'response_code': '', 'operation_id': '83a0b678-d7f9-427e-9b14-a56817ed4471'}, 'data': {'id': 'issuing_38b0e01d5173fabf8d9204499c845353', 'merchant_reference_id': 'issuing_38b0e01d5173fabf8d9204499c845353', 'ewallet': 'ewallet_b2249378547497bd26a4eb5403f9fb3e', 'bank_account': {'beneficiary_name': 'CashDash UK Limited', 'address': 'Northwest House, 119 Marylebone Road NW1 5PU', 'country_iso': 'GB', 'iban': 'GB36SAPY60838292780648', 'sort_code': '608382', 'account_no': '0092780648', 'bic': 'SAPYGB2L'}, 'metadata': {}, 'status': 'ACT', 'description': 'Issue test bank account', 'funding_instructions': None, 'currency': 'GBP', 'transactions': []}}
 
@@ -224,7 +210,7 @@ def main_page(request):
 		print(balances)
 		
 
-		all_wallet_transactions =  wallet.list_transactions(a_wallet.ewallet_rapyd_id)
+		all_wallet_transactions =  wallet.list_transactions(a_wallet.ewallet_rapyd_id, 5)
 
 		print('-----------------all_wallet_transactions---------------------')
 		print(all_wallet_transactions)
@@ -322,15 +308,44 @@ def list_vbank(request):
 	print(request_body)
 	wallet_rapyd_id = request_body.get('ewallet_rapyd_id')
 	print(wallet_rapyd_id)
+
 	return JsonResponse(vbank.list_virtual_accounts(wallet_rapyd_id))
+
+
+def get_vbank(request):
+	request_body = request.POST
+	print(request_body)
+	# wallet_rapyd_id = request_body.get('ewallet_rapyd_id')
+	# print(wallet_rapyd_id)
+	
+	vbank_rapyd_id = request_body.get('vbank_rapyd_id')
+	print(vbank_rapyd_id)
+
+	
+	a_vbank =  Vbank_account.objects.get(rapyd_id = vbank_rapyd_id)
+	ser_obj =  json.loads(serialize('json', [a_vbank], cls=LazyEncoder))[0]['fields']
+
+	context = {"vbank":ser_obj }
+	return render(request, "soft/vbank.html", context)
+	#return JsonResponse(vbank.list_virtual_accounts(wallet_rapyd_id))
 
 
 def make_deposit(request):
 	request_body = request.POST
 	print(request_body)
 	vbank_id = request_body.get('vbank_rapyd_id')
+	amount = request_body.get('amount')
+	currency = request_body.get('currency')
 	print(vbank_id)
-	deposit_response =  vbank.bank_deposit(vbank_id)
+	deposit_response =  vbank.bank_deposit(vbank_id, amount, currency)
+	
+	print("-----------------bank deposit---------------")
+
+	print(deposit_response)
+	
+	print("-----------------bank deposit end---------------")
+	
+	return JsonResponse(deposit_response)
 
 
 def test_vbank(request):
@@ -370,38 +385,9 @@ def test_vbank(request):
 	if the_bank_number == None :
 		vbank_response = vbank.create_virtual_bank_account(a_wallet.ewallet_rapyd_id, country_iso, currency_code )
 		if vbank_response['status']['status'] =="SUCCESS":
-			vbank_account = Vbank_account()
-			vbank_account.rapyd_id = vbank_response['data']['id']
-			Vbank_account.merchant_reference_id = vbank_response['data']['merchant_reference_id']
-			vbank_account.ewallet_rapyd_id = vbank_response['data']['ewallet']
-			vbank_account.beneficiary_name = vbank_response['data']['bank_account']['beneficiary_name']
-			vbank_account.country_iso = vbank_response['data']['bank_account']['country_iso']
-
-			if  "account_no" in vbank_response['data']['bank_account']:
-				vbank_account.account_no = vbank_response['data']['bank_account']['account_no']
-			elif 'account_number' in vbank_response['data']['bank_account']:
-				vbank_account.account_no = vbank_response['data']['bank_account']['account_number']
-
-
-			if  'address' in vbank_response['data']['bank_account']:
-				vbank_account.address = vbank_response['data']['bank_account']['address']
-
-			if  'iban' in vbank_response['data']['bank_account'] :
-				vbank_account.iban = vbank_response['data']['bank_account']['iban']
-
-			if  'sort_code' in vbank_response['data']['bank_account']:
-				vbank_account.sort_code = vbank_response['data']['bank_account']['sort_code']
-
-			if  'bic' in vbank_response['data']['bank_account']:
-				vbank_account.bic = vbank_response['data']['bank_account']['bic']
-
-
-			vbank_account.status = vbank_response['data']['status']
-			vbank_account.currency = vbank_response['data']['currency']
-			vbank_account.wallet = a_wallet
-			vbank_account.save()
+			vbank_account = create_vbank_account_process(a_wallet, vbank_response)
+			
 			the_bank_number = vbank_response['data']
-	
 	
 			#country_capabilities = vbank.list_capabilities(country_iso)
 				
@@ -423,3 +409,40 @@ def list_capabilities(request):
 
 	cpa_response  = vbank.list_capabilities(country_code)
 	return JsonResponse(cpa_response)
+
+
+
+
+def create_vbank_account_process(a_wallet, vbank_response):
+	vbank_account = Vbank_account()
+	vbank_account.rapyd_id = vbank_response['data']['id']
+	Vbank_account.merchant_reference_id = vbank_response['data']['merchant_reference_id']
+	vbank_account.ewallet_rapyd_id = vbank_response['data']['ewallet']
+	vbank_account.beneficiary_name = vbank_response['data']['bank_account']['beneficiary_name']
+	vbank_account.country_iso = vbank_response['data']['bank_account']['country_iso']
+
+	if  "account_no" in vbank_response['data']['bank_account']:
+		vbank_account.account_no = vbank_response['data']['bank_account']['account_no']
+	elif 'account_number' in vbank_response['data']['bank_account']:
+		vbank_account.account_no = vbank_response['data']['bank_account']['account_number']
+
+
+	if  'address' in vbank_response['data']['bank_account']:
+		vbank_account.address = vbank_response['data']['bank_account']['address']
+
+	if  'iban' in vbank_response['data']['bank_account'] :
+		vbank_account.iban = vbank_response['data']['bank_account']['iban']
+
+	if  'sort_code' in vbank_response['data']['bank_account']:
+		vbank_account.sort_code = vbank_response['data']['bank_account']['sort_code']
+
+	if  'bic' in vbank_response['data']['bank_account']:
+		vbank_account.bic = vbank_response['data']['bank_account']['bic']
+
+
+	vbank_account.status = vbank_response['data']['status']
+	vbank_account.currency = vbank_response['data']['currency']
+	vbank_account.wallet = a_wallet
+	vbank_account.save()
+
+	return vbank_account

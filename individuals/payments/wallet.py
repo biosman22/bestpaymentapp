@@ -113,9 +113,9 @@ def retrive_balances(wallet_id):
     return results.json()
 
 
-def list_transactions(wallet_id):
+def list_transactions(wallet_id, n_results):
     http_method = 'get'                   # get|put|post|delete - must be lowercase
-    path = '/v1/user/'+wallet_id+'/transactions'
+    path = '/v1/user/'+wallet_id+'/transactions?page_size='+ str(n_results)
 
     results = call_api(http_method, path=path )
 
